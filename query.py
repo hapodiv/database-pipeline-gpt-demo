@@ -57,10 +57,10 @@ def num_tokens_from_messages(messages):
 def get_prompt(query: str, context: str) -> str:
     """Return the prompt with query and context."""
     return (
-        f"Create the daily report content to fullfil the requested task.\n" +
+        f"Create the travel plan content to fullfil the requested task.\n" +
         f"Below you will find some context that may help. Ignore it if it seems irrelevant.\n\n" +
         f"Context:\n{context}" +
-        f"\n\nTask: {query}\n\nYAML Code:"
+        f"\n\nTask: {query}\n\nTravel plan:"
     )
 
 def get_message(role: str, content: str) -> dict:
@@ -87,7 +87,8 @@ def get_context(query: str, max_tokens: int) -> list:
     context_count = 0
     for i in range(0, len(matches)):
 
-        report_date = matches[i]['metadata']['report_date']
+        buget = matches[i]['metadata']['buget']
+        name = matches[i]['metadata']['name']
         if matches[i]['score'] < match_min_score:
             # skip context with low similarity score
             continue
@@ -126,7 +127,7 @@ messages = []
 messages.append(get_message('user', prompt))
 
 # Custom your assistant messages here
-messages.append(get_message('system', 'You are a helpful assistant that writes the daily report. Return daily report inside code fences.'))
+messages.append(get_message('system', 'You are a helpful assistant that writes the travel plan for your travel agency in Japan. Return travel plan content in Japanese language.'))
 
 if num_tokens_from_messages(messages) >= max_tokens_model:
     raise Exception('Model token size limit reached') 
